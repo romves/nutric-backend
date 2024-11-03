@@ -1,9 +1,10 @@
 // src/auth/controllers/auth.controller.ts
 import { Body, Controller, Post, UsePipes, ValidationPipe } from '@nestjs/common';
-import { AuthService } from '../services/auth.service';
-import { TokenResponse } from '../interfaces/auth.interface';
-import { AuthDto } from '../dtos/auth.dto';
 import { createResponse, Response } from 'src/common/utils/response.util';
+import { AuthDto } from '../dtos/auth.dto';
+import { GoogleLoginDto } from '../dtos/google-login.dto';
+import { TokenResponse } from '../interfaces/auth.interface';
+import { AuthService } from '../services/auth.service';
 
 @Controller('auth')
 export class AuthController {
@@ -20,5 +21,10 @@ export class AuthController {
   async signIn(@Body() authDto: AuthDto): Promise<Response<TokenResponse>> {
     const response = await this.authService.signIn(authDto);
     return createResponse(response, 'Sign in successfully');
+  }
+
+  @Post('google-login')
+  async googleLogin(@Body() googleLoginDto: GoogleLoginDto): Promise<Response<TokenResponse>> {
+    return createResponse(await this.authService.verifyGoogleToken(googleLoginDto), 'Sign in successfully');
   }
 }

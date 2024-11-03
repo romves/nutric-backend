@@ -19,6 +19,19 @@ export class AuthRepository {
     });
   }
 
+  async createGoogleUser(username: string, googleId: string): Promise<UserResponse> {
+    return this.prisma.user.create({
+      data: {
+        username,
+        google_id: googleId,
+      },
+      select: {
+        id: true,
+        username: true,
+      },
+    });
+  }
+
   async findByUsername(username: string) {
     return this.prisma.user.findUnique({
       where: { username },
@@ -33,6 +46,18 @@ export class AuthRepository {
   async findById(id: string): Promise<UserResponse | null> {
     return this.prisma.user.findUnique({
       where: { id },
+      select: {
+        id: true,
+        username: true,
+      },
+    });
+  }
+  
+  async findByGoogleToken(token: string): Promise<UserResponse | null> {
+    return this.prisma.user.findFirst({
+      where: {
+        google_id: token,
+      },
       select: {
         id: true,
         username: true,

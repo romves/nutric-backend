@@ -8,7 +8,7 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
   intercept(context: ExecutionContext, next: CallHandler): Observable<Response<T>> {
     return next.handle().pipe(
       map(data => {
-        if (data?.status !== undefined && data?.message !== undefined) {
+        if (data?.success !== undefined && data?.message !== undefined) {
           return data;
         }
 
