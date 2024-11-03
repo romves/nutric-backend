@@ -1,5 +1,4 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { PrismaService } from 'src/common/db/prisma/prisma.service';
 import { AuthRepository } from '../repositories/auth.repository';
 import { TokenService } from './token.service';
 import { PasswordService } from './password.service';
