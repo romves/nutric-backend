@@ -14,10 +14,97 @@ datasource db {
 }
 
 model User {
-  id        String  @id @default(cuid())
-  google_id String? @unique
-  username  String  @unique
-  password  String?
+  id         String   @id @default(cuid())
+  google_id  String?  @unique
+  username   String   @unique
+  password   String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  health_info  HealthInfo?
+  meal_log     MealLog[]
+  scan_history ScanHistory[]
 
   @@map("user")
+}
+
+model HealthInfo {
+  id             String @id @default(cuid())
+  user_id        String @unique
+  height         Float
+  weight         Float
+  age            Int
+  activity_level String
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("health_info")
+}
+
+model Food {
+  id           String @id @default(cuid())
+  name         String
+  category     String
+
+  food_macronutrient     FoodMacroNutrient?
+  meal_log           MealLog[]
+  scan_history       ScanHistory[]
+  food_micronutrient FoodMicroNutrient[]
+
+  @@map("food")
+}
+
+model FoodMacroNutrient {
+  id            String @id @default(cuid())
+  food_id       String @unique
+  calories      Float
+  protein       Float
+  fat           Float
+  carbohydrates Float
+
+  food Food @relation(fields: [food_id], references: [id], onDelete: Cascade)
+
+  @@map("food_nutrition")
+}
+
+model FoodMicroNutrient {
+  id        String @id @default(cuid())
+  food_id   String
+  vitamin_a Float? // Vitamin A (in mcg)
+  vitamin_c Float? // Vitamin C (in mg)
+  calcium   Float? // Calcium (in mg)
+  iron      Float? // Iron (in mg)
+  magnesium Float? // Magnesium (in mg)
+  potassium Float? // Potassium (in mg)
+  zinc      Float? // Zinc (in mg)
+
+  food Food @relation(fields: [food_id], references: [id], onDelete: Cascade)
+
+  @@map("food_micronutrients")
+}
+
+model MealLog {
+  id           String   @id @default(cuid())
+  user_id      String
+  food_id      String
+  meal_time    DateTime
+  serving_size Float
+  serving_unit String
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  food Food @relation(fields: [food_id], references: [id], onDelete: Cascade)
+
+  @@map("meal_log")
+}
+
+model ScanHistory {
+  id      String @id @default(cuid())
+  user_id String
+  food_id String
+  type    String
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  food Food @relation(fields: [food_id], references: [id], onDelete: Cascade)
+
+  @@map("scan_history")
 }
