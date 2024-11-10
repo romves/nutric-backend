@@ -29,24 +29,34 @@ model User {
 }
 
 model HealthInfo {
-  id             String @id @default(cuid())
-  user_id        String @unique
+  id             String    @id @default(cuid())
+  user_id        String    @unique
   height         Float
   weight         Float
   age            Int
   activity_level String
+  allergies      Allergy[]
 
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("health_info")
 }
 
-model Food {
-  id           String @id @default(cuid())
-  name         String
-  category     String
+model Allergy {
+  id             String  @id @default(cuid())
+  name           String
+  description    String?
+  health_info_id String
 
-  food_macronutrient     FoodMacroNutrient?
+  health_info HealthInfo @relation(fields: [health_info_id], references: [id])
+}
+
+model Food {
+  id       String @id @default(cuid())
+  name     String
+  category String
+
+  food_macronutrient FoodMacroNutrient?
   meal_log           MealLog[]
   scan_history       ScanHistory[]
   food_micronutrient FoodMicroNutrient[]
