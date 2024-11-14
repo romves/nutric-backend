@@ -1,0 +1,23 @@
+services:
+  nutric_api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./src:/usr/src/app/src
+    depends_on:
+      - nutric_db
+
+  nutric_db:
+    image: postgres:15
+    ports:
+      - '5432:5432'
+    environment:
+      env_file: .env
+      POSTGRES_USER: nutric
+      POSTGRES_PASSWORD: nutric
+      POSTGRES_DB: nutric
