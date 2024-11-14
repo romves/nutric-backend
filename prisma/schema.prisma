@@ -43,12 +43,13 @@ model HealthInfo {
 }
 
 model Allergy {
-  id             String  @id @default(cuid())
-  name           String
-  description    String?
-  health_info_id String
+  name           String @id @unique
+  description    String? 
 
-  health_info HealthInfo @relation(fields: [health_info_id], references: [id])
+  health_info HealthInfo? @relation(fields: [health_info_id], references: [id])
+  health_info_id String?
+
+  @@map("allergy")
 }
 
 model Food {
