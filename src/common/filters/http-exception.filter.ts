@@ -27,7 +27,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         : (exceptionResponse as any).message || exception.message;
     }
 
-    if (exception instanceof Prisma.PrismaClientKnownRequestError) {
+    if (exception instanceof Prisma.PrismaClientKnownRequestError || exception instanceof Prisma.PrismaClientValidationError) {
       status = HttpStatus.BAD_REQUEST;
       message = exception.message;
     }
