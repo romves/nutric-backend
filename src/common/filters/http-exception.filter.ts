@@ -7,10 +7,12 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { createErrorResponse } from '../utils/response.util';
+import { Prisma } from '@prisma/client';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
+
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 
@@ -23,6 +25,11 @@ export class HttpExceptionFilter implements ExceptionFilter {
       message = typeof exceptionResponse === 'string' 
         ? exceptionResponse 
         : (exceptionResponse as any).message || exception.message;
+    }
+
+    if (exception instanceof Prisma.PrismaClientKnownRequestError) {
+      status = HttpStatus.BAD_REQUEST;
+      message = exception.message;
     }
 
     response
