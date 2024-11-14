@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PredictFoodDto } from '../dtos/predict-food.dto';
-import { PromptService } from 'src/module/gemini/services/prompt.service';
+import { PromptService } from '../../../module/gemini/services/prompt.service';
 import { NutritionPrompt } from '../constants/prompt';
-import { HealthInfoService } from 'src/module/health-info/services/health-info.service';
+import { HealthInfoService } from '../../../module/health-info/services/health-info.service';
 import { Food, Prisma, User } from '@prisma/client';
 import {
   AllergenCheckDto,

@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Post, Put, UseGuards } from '@nestjs/common';
-import { User } from 'src/common/decorators/user/user.decorator';
-import { JwtAuthGuard } from 'src/module/auth/guards/auth.guard';
-import { CreateHealthInfoDto } from '../dtos/health-info.dto';
+import { ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { User as UserT } from '@prisma/client';
+import { JwtAuthGuard } from '../../../module/auth/guards/auth.guard';
+import { User } from '../../../common/decorators/user/user.decorator';
+import { CreateHealthInfoDto } from '../dtos/health-info.dto';
 import { HealthInfoService } from '../services/health-info.service';
-import { ApiBearerAuth, ApiBody, ApiHeader } from '@nestjs/swagger';
 
 @UseGuards(JwtAuthGuard)
 @Controller('health-info')

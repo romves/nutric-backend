@@ -10,9 +10,9 @@ import {
 } from '@nestjs/common';
 import { MealService } from '../services/meal.service';
 import { AddMealDto } from '../dtos/add-meal.dto';
-import { User } from 'src/common/decorators/user/user.decorator';
+import { User } from '../../../common/decorators/user/user.decorator';
 import { User as TUser } from '@prisma/client';
-import { JwtAuthGuard } from 'src/module/auth/guards/auth.guard';
+import { JwtAuthGuard } from '../../../module/auth/guards/auth.guard';
 import { ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { GetMealsQueryDto } from '../dtos/get-meal.dto';
 import { MealFilter } from '../dtos/meal.dto';

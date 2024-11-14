@@ -1,7 +1,7 @@
 // src/auth/controllers/auth.controller.ts
 import { Body, Controller, Post } from '@nestjs/common';
 import { ApiBody } from '@nestjs/swagger';
-import { createResponse, Response } from 'src/common/utils/response.util';
+import { createResponse, Response } from '../../../common/utils/response.util';
 import { AuthDto } from '../dtos/auth.dto';
 import { GoogleLoginDto } from '../dtos/google-login.dto';
 import { TokenResponse } from '../interfaces/auth.interface';

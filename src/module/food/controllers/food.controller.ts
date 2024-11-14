@@ -9,8 +9,8 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PredictFoodDto } from '../dtos/predict-food.dto';
 import { FoodService } from '../services/food.service';
-import { JwtAuthGuard } from 'src/module/auth/guards/auth.guard';
-import { User } from 'src/common/decorators/user/user.decorator';
+import { JwtAuthGuard } from '../../../module/auth/guards/auth.guard';
+import { User } from '../../../common/decorators/user/user.decorator';
 import { User as TUser } from '@prisma/client';
 import { ApiBearerAuth, ApiBody, ApiConsumes } from '@nestjs/swagger';
 

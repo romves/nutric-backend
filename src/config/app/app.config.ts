@@ -1,6 +1,6 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { HttpExceptionFilter } from 'src/common/filters/http-exception.filter';
-import { ResponseInterceptor } from 'src/common/interceptors/response.interceptor';
+import { HttpExceptionFilter } from '../../common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../common/interceptors/response.interceptor';
 
 export const setupGlobalConfig = (app: INestApplication) => {
   app.useGlobalPipes(new ValidationPipe({
