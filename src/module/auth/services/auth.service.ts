@@ -4,7 +4,7 @@ import { TokenService } from './token.service';
 import { PasswordService } from './password.service';
 import { AuthDto } from '../dtos/auth.dto';
 import { TokenResponse } from '../interfaces/auth.interface';
-import { OAuth2Client } from 'google-auth-library';
+import { LoginTicket, OAuth2Client } from 'google-auth-library';
 import { GoogleLoginDto } from '../dtos/google-login.dto';
 
 @Injectable()
@@ -63,10 +63,15 @@ export class AuthService {
   async verifyGoogleToken(
     googleLoginDto: GoogleLoginDto,
   ): Promise<TokenResponse> {
-    const ticket = await this.client.verifyIdToken({
-      idToken: googleLoginDto.token,
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
+    let ticket: LoginTicket;
+    try {
+      ticket = await this.client.verifyIdToken({
+        idToken: googleLoginDto.token,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      });
+    } catch (error) {
+      throw new UnauthorizedException('Invalid token');
+    }
 
     const payload = ticket.getPayload();
     if (!payload) {
