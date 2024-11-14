@@ -1,15 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { HealthInfo, Prisma } from '@prisma/client';
+import { Allergy, HealthInfo, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/common/db/prisma/prisma.service';
 
 @Injectable()
 export class HealthInfoRepository {
   constructor(private prisma: PrismaService) {}
 
-  async getHealthInfo(id: string): Promise<HealthInfo> {
+  async getHealthInfo(id: string): Promise<
+    HealthInfo & {
+      allergies: Allergy[];
+    }
+  > {
     return this.prisma.healthInfo.findUnique({
       where: {
-        id,
+        user_id: id,
       },
       include: {
         allergies: true,
@@ -17,22 +21,31 @@ export class HealthInfoRepository {
     });
   }
 
-  async createHealthInfo(healthInfo: Prisma.HealthInfoCreateInput) {
+  async createHealthInfo(healthInfo: Prisma.HealthInfoUncheckedCreateInput) {
     try {
       return this.prisma.healthInfo.create({
         data: healthInfo,
+        include: {
+          allergies: true,
+        },
       });
     } catch (error) {
       throw new Error(error);
     }
   }
 
-  async updateHealthInfo(id: string, healthInfo: HealthInfo) {
+  async updateHealthInfo(
+    id: string,
+    healthInfo: Prisma.HealthInfoUpdateInput,
+  ) {
     return this.prisma.healthInfo.update({
       where: {
-        id,
+        user_id: id,
       },
       data: healthInfo,
+      include: {
+        allergies: true,
+      },
     });
   }
 }

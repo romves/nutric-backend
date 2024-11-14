@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, UseGuards } from '@nestjs/common';
 import { User } from 'src/common/decorators/user/user.decorator';
 import { JwtAuthGuard } from 'src/module/auth/guards/auth.guard';
 import { CreateHealthInfoDto } from '../dtos/health-info.dto';
@@ -26,5 +26,16 @@ export class HealthInfoController {
     @User() user: UserT,
   ) {
     return this.healthInfoService.createHealthInfo(createHealthInfoDto, user);
+  }
+
+  @ApiBody({
+    type: CreateHealthInfoDto,
+  })
+  @Put()
+  async updateHealthInfo(
+    @Body() updateHealthInfoDto: CreateHealthInfoDto,
+    @User() user: UserT,
+  ) {
+    return this.healthInfoService.updateHealthInfo(updateHealthInfoDto, user);
   }
 }
