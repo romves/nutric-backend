@@ -43,24 +43,25 @@ model HealthInfo {
 }
 
 model Allergy {
-  name           String @id @unique
-  description    String? 
+  name        String  @id @unique
+  description String?
 
-  health_info HealthInfo? @relation(fields: [health_info_id], references: [id])
-  health_info_id String?
+  health_infos HealthInfo[]
+  foods        Food[]       @relation("FoodAllergy")
 
   @@map("allergy")
 }
 
 model Food {
   id       String @id @default(cuid())
-  name     String
+  name     String @unique
   category String
 
   food_macronutrient FoodMacroNutrient?
   meal_log           MealLog[]
   scan_history       ScanHistory[]
-  food_micronutrient FoodMicroNutrient[]
+  food_micronutrient FoodMicroNutrient?
+  allergens          Allergy[]          @relation("FoodAllergy")
 
   @@map("food")
 }
@@ -80,7 +81,7 @@ model FoodMacroNutrient {
 
 model FoodMicroNutrient {
   id        String @id @default(cuid())
-  food_id   String
+  food_id   String @unique
   vitamin_a Float? // Vitamin A (in mcg)
   vitamin_c Float? // Vitamin C (in mg)
   calcium   Float? // Calcium (in mg)
@@ -98,9 +99,10 @@ model MealLog {
   id           String   @id @default(cuid())
   user_id      String
   food_id      String
-  meal_time    DateTime
   serving_size Float
   serving_unit String
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
 
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
   food Food @relation(fields: [food_id], references: [id], onDelete: Cascade)
@@ -109,10 +111,12 @@ model MealLog {
 }
 
 model ScanHistory {
-  id      String @id @default(cuid())
-  user_id String
-  food_id String
-  type    String
+  id        String   @id @default(cuid())
+  user_id   String
+  food_id   String
+  type      String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
   food Food @relation(fields: [food_id], references: [id], onDelete: Cascade)
