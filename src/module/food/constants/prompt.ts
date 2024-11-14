@@ -1,6 +1,9 @@
 export class NutritionPrompt {
-  static generateNutrientPrompt(foodName: string, allergensArray: string[]): string {
-    return `Please provide the macronutrient and micronutrient information for the food item '${foodName}'. Additionally, check if the food contains any of the following allergens: '${allergensArray}'. The macronutrient details should include the following:
+  static generateNutrientPrompt(
+    foodName: string,
+    allergensArray: string[],
+  ): string {
+    return `Please provide the macronutrient and micronutrient information for the food item ${foodName}. Additionally, check if the food contains any of the following allergens: ${allergensArray}. The macronutrient details should include the following:
   - Calories (in kcal)
   - Protein (in grams)
   - Fat (in grams)
@@ -15,7 +18,7 @@ Additionally, please include the micronutrient details, with the values for:
   - Potassium (in mg)
   - Zinc (in mg)
 
-Please respond only with the JSON data in the following format:
+Please respond with only the plain non formatted JSON data (without note or anything) in the following format:
 {
   "macronutrients": {
     "calories": number,
@@ -24,8 +27,8 @@ Please respond only with the JSON data in the following format:
     "carbohydrates": number
   },
   "micronutrients": {
-    "vitaminA": number,
-    "vitaminC": number,
+    "vitamin_a": number,
+    "vitamin_c": number,
     "calcium": number,
     "iron": number,
     "magnesium": number,
@@ -37,5 +40,9 @@ Please respond only with the JSON data in the following format:
     "allergens_found": ["allergen1", "allergen2", ...]
   }
 }`;
+  }
+
+  static generateFoodNamePrompt(): string {
+    return "Given an image of food, analyze the contents and provide a single-word or concise name for the type of food shown in the image. Focus on common names that best describe the food, such as 'pasta,' 'pizza,' or 'salad.' Avoid brand names or overly specific regional names. Ensure the result is descriptive yet concise.";
   }
 }
