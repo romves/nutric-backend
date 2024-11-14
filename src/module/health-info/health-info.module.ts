@@ -6,5 +6,6 @@ import { HealthInfoRepository } from './repositories/health-info.repository';
 @Module({
   controllers: [HealthInfoController],
   providers: [HealthInfoService, HealthInfoRepository],
+  exports: [HealthInfoService, HealthInfoRepository],
 })
 export class HealthInfoModule {}
