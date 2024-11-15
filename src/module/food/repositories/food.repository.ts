@@ -36,6 +36,11 @@ export class FoodRepository {
     try {
       return this.prisma.food.create({
         data: food,
+        include: {
+          food_macronutrient: true,
+          food_micronutrient: true,
+          allergens: true,
+        },
       });
     } catch (error) {
       console.log(error);
