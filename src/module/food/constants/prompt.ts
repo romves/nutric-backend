@@ -18,7 +18,7 @@ Additionally, please include the micronutrient details, with the values for:
   - Potassium (in mg)
   - Zinc (in mg)
 
-Please respond with only the plain non formatted JSON data (without note or anything) in the following format:
+Please respond with only the plain non formatted JSON data (without note or string format or md format) in the following format:
 {
   "macronutrients": {
     "calories": number,
@@ -43,6 +43,6 @@ Please respond with only the plain non formatted JSON data (without note or anyt
   }
 
   static generateFoodNamePrompt(): string {
-    return "Given an image of food, analyze the contents and provide a single-word or concise name for the type of food shown in the image. Focus on common names that best describe the food, such as 'pasta,' 'pizza,' or 'salad.' Avoid brand names or overly specific regional names. Ensure the result is descriptive yet concise.";
+    return "Given an image of food, analyze the contents and provide a single-word or concise name for the type of food shown in the image. Focus on common names that best describe the food, such as 'pasta,' 'pizza,' or 'salad.' Avoid brand names or overly specific regional names. Ensure the result is descriptive yet concise. And return only the text without any additional newlines or formatting.";
   }
 }

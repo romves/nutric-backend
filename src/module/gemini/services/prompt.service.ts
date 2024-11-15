@@ -4,6 +4,7 @@ import {
   GoogleAIFileManager,
 } from '@google/generative-ai/server';
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import fs from 'fs';
 
 @Injectable()
@@ -11,8 +12,14 @@ export class PromptService {
   private readonly genAI: GoogleGenerativeAI;
   private readonly model: GenerativeModel;
 
-  constructor() {
-    this.genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+  constructor(private configService: ConfigService) {
+    const apiKey = this.configService.get('GEMINI_API_KEY');
+
+    if (!apiKey) {
+      throw new Error('GEMINI_API_KEY is missing or invalid');
+    }
+    
+    this.genAI = new GoogleGenerativeAI(apiKey);
     this.model = this.genAI.getGenerativeModel({
       model: 'gemini-1.5-flash',
     });
