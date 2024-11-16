@@ -33,18 +33,13 @@ export class FoodRepository {
   }
 
   async createFood(food: Prisma.FoodUncheckedCreateInput) {
-    try {
-      return this.prisma.food.create({
-        data: food,
-        include: {
-          food_macronutrient: true,
-          food_micronutrient: true,
-          allergens: true,
-        },
-      });
-    } catch (error) {
-      console.log(error);
-    }
-   
+    return this.prisma.food.create({
+      data: food,
+      include: {
+        food_macronutrient: true,
+        food_micronutrient: true,
+        allergens: true,
+      },
+    });
   }
 }
