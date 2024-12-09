@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthRepository } from '../repositories/auth.repository';
 import { TokenService } from './token.service';
 import { PasswordService } from './password.service';
@@ -30,7 +30,7 @@ export class AuthService {
       return this.tokenService.generateToken(user);
     } catch (error) {
       if (error.code === 'P2002') {
-        throw new UnauthorizedException('Username already exists');
+        throw new ConflictException('Username already exists');
       }
       throw error;
     }
