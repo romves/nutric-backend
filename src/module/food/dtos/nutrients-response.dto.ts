@@ -18,6 +18,12 @@ export class MacronutrientsDto {
 
   @IsNumber()
   carbohydrates: number;
+
+  @IsNumber()
+  fiber: number;
+
+  @IsNumber()
+  sugar: number;
 }
 
 export class MicronutrientsDto {

@@ -5,12 +5,13 @@ import { JwtAuthGuard } from '../../../module/auth/guards/auth.guard';
 import { User } from '../../../common/decorators/user/user.decorator';
 import { CreateHealthInfoDto } from '../dtos/health-info.dto';
 import { HealthInfoService } from '../services/health-info.service';
+import { DailyTargetService } from '../services/daily-target.service';
 
 @UseGuards(JwtAuthGuard)
 @Controller('health-info')
 @ApiBearerAuth('JWT-auth')
 export class HealthInfoController {
-  constructor(private healthInfoService: HealthInfoService) {}
+  constructor(private healthInfoService: HealthInfoService, private dailyTargetService: DailyTargetService) {}
 
   @Get()
   async getHealthInfo(@User() user: UserT) {
@@ -37,5 +38,10 @@ export class HealthInfoController {
     @User() user: UserT,
   ) {
     return this.healthInfoService.updateHealthInfo(updateHealthInfoDto, user);
+  }
+  
+  @Get('daily-target')
+  async getDailyTarget(@User() user: UserT) {
+    return this.dailyTargetService.getDailyTargetByUserId(user.id);
   }
 }
