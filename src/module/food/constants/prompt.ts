@@ -8,6 +8,8 @@ export class NutritionPrompt {
   - Protein (in grams)
   - Fat (in grams)
   - Carbohydrates (in grams)
+  - Fiber (in grams)
+  - Sugar (in grams)
   
 Additionally, please include the micronutrient details, with the values for:
   - Vitamin A (in mcg)
@@ -26,6 +28,8 @@ Respond with application/json data only, without any formatting, notes, or expla
     "protein": number,
     "fat": number,
     "carbohydrates": number
+    "fiber": number,
+    "sugar": number
   },
   "micronutrients": {
     "vitamin_a": number,
