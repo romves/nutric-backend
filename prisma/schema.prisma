@@ -24,6 +24,7 @@ model User {
   health_info  HealthInfo?
   meal_log     MealLog[]
   scan_history ScanHistory[]
+  daily_target  DailyTarget?
 
   @@map("user")
 }
@@ -73,6 +74,8 @@ model FoodMacroNutrient {
   protein       Float
   fat           Float
   carbohydrates Float
+  fiber         Float
+  sugar         Float
 
   food Food @relation(fields: [food_id], references: [id], onDelete: Cascade)
 
@@ -101,8 +104,8 @@ model MealLog {
   food_id      String
   serving_size Float
   serving_unit String
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
 
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
   food Food @relation(fields: [food_id], references: [id], onDelete: Cascade)
@@ -111,10 +114,10 @@ model MealLog {
 }
 
 model ScanHistory {
-  id        String   @id @default(cuid())
-  user_id   String
-  food_id   String
-  type      String
+  id         String   @id @default(cuid())
+  user_id    String
+  food_id    String
+  type       String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
@@ -122,4 +125,19 @@ model ScanHistory {
   food Food @relation(fields: [food_id], references: [id], onDelete: Cascade)
 
   @@map("scan_history")
+}
+
+model DailyTarget {
+  id            String @id @default(cuid())
+  user_id       String @unique
+  calories      Float // Daily calorie target
+  protein       Float // Daily protein target (in grams)
+  fat           Float // Daily fat target (in grams)
+  carbohydrates Float // Daily carbohydrates target (in grams)
+  fiber         Float // Daily fiber target (in grams)
+  sugar         Float // Daily sugar target (in grams)
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("daily_target")
 }
