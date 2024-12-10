@@ -12,6 +12,7 @@ import {
 } from '../dtos/nutrients-response.dto';
 import { FoodRepository } from '../repositories/food.repository';
 import { createId } from '@paralleldrive/cuid2';
+import { AllergyService } from 'src/module/allergy/services/allergy.service';
 
 @Injectable()
 export class FoodService {
@@ -19,6 +20,7 @@ export class FoodService {
     private readonly promptService: PromptService,
     private readonly healthInfoService: HealthInfoService,
     private readonly foodRepository: FoodRepository,
+    private readonly allergyService: AllergyService,
   ) {}
 
   async predictFoodName(foodImage: Express.Multer.File) {
@@ -31,11 +33,13 @@ export class FoodService {
   }
 
   async predictNutrition(predictFoodDto: PredictFoodDto, user: User) {
-    const allergies = await this.getUserAllergies(user);
-    const prompt = this.generatePrompt(predictFoodDto.foodName, allergies);
-    const nutrition_result =
-      await this.promptService.generateResponseByPrompt(prompt);
-    const foodInfoDto = this.parseNutritionResult(nutrition_result);
+    const allergies = await this.allergyService.getAllergies();
+    const formattedAllergies = allergies.map((allergy) => allergy.name);
+    const userAllergies = await this.getUserAllergies(user);
+    const prompt = this.generatePrompt(predictFoodDto.foodName, formattedAllergies);
+
+    const nutrition_result = await this.promptService.generateResponseByPrompt(prompt);
+    const foodInfoDto = this.parseNutritionResult(nutrition_result, userAllergies);
 
     return this.getOrCreateFood(predictFoodDto, foodInfoDto);
   }
@@ -49,7 +53,7 @@ export class FoodService {
     return NutritionPrompt.generateNutrientPrompt(foodName, allergies);
   }
 
-  private parseNutritionResult(nutritionResult: string): FoodInfoDto {
+  private parseNutritionResult(nutritionResult: string, userAllergies: string[]): FoodInfoDto {
     const parsedResult = JSON.parse(nutritionResult);
     const foodInfoDto = new FoodInfoDto();
 
@@ -67,7 +71,12 @@ export class FoodService {
 
     if (parsedResult.allergen_check) {
       const allergenCheckDto = new AllergenCheckDto();
-      Object.assign(allergenCheckDto, parsedResult.allergen_check);
+
+      allergenCheckDto.contains_allergens = parsedResult.allergen_check.allergens_found.some(
+        (allergen) => userAllergies.includes(allergen),
+      );
+
+      allergenCheckDto.allergens_found = parsedResult.allergen_check.allergens_found;
       foodInfoDto.allergen_check = allergenCheckDto;
     }
 
@@ -81,7 +90,10 @@ export class FoodService {
     const foodExist = await this.foodRepository.getFoodByName(
       predictFoodDto.foodName,
     );
-    if (foodExist) return foodExist;
+
+    if (foodExist) {
+      return foodExist;
+    }
 
     const newFood: Prisma.FoodUncheckedCreateInput = {
       id: createId(),

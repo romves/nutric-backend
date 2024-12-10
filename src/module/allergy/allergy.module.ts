@@ -6,6 +6,6 @@ import { AllergyRepository } from './repositories/allergy.repository';
 @Module({
     controllers: [AllergyController],
     providers: [AllergyService, AllergyRepository],
-    exports: [],
+    exports: [AllergyService, AllergyRepository],
 })
 export class AllergyModule {}
