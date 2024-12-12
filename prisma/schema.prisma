@@ -24,7 +24,8 @@ model User {
   health_info  HealthInfo?
   meal_log     MealLog[]
   scan_history ScanHistory[]
-  daily_target  DailyTarget?
+  daily_target DailyTarget?
+  articles     Article[]
 
   @@map("user")
 }
@@ -140,4 +141,15 @@ model DailyTarget {
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("daily_target")
+}
+
+model Article {
+  id         String   @id @default(uuid())
+  title      String
+  content    String
+  authorId   String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  imageUrl   String?
+  author     User     @relation(fields: [authorId], references: [id])
 }
