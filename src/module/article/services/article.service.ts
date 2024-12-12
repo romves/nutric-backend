@@ -50,12 +50,28 @@ export class ArticleService {
       orderBy: {
         created_at: 'desc',
       },
+      include: {
+        author: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+      },
     });
   }
 
   async findOne(id: string) {
     const article = await this.prisma.article.findUnique({
       where: { id },
+      include: {
+        author: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+      },
     });
 
     if (!article) {
