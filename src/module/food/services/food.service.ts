@@ -71,12 +71,16 @@ export class FoodService {
 
     if (parsedResult.allergen_check) {
       const allergenCheckDto = new AllergenCheckDto();
-
-      allergenCheckDto.contains_allergens = parsedResult.allergen_check.allergens_found.some(
-        (allergen) => userAllergies.includes(allergen),
+    
+      console.log(userAllergies);
+    
+      const userAllergens = parsedResult.allergen_check.allergens_found.filter((allergen) =>
+        userAllergies.includes(allergen),
       );
-
-      allergenCheckDto.allergens_found = parsedResult.allergen_check.allergens_found;
+    
+      allergenCheckDto.contains_allergens = userAllergens.length > 0;
+      allergenCheckDto.allergens_found = userAllergens;
+    
       foodInfoDto.allergen_check = allergenCheckDto;
     }
 
@@ -91,8 +95,15 @@ export class FoodService {
       predictFoodDto.foodName,
     );
 
+    console.log(foodInfoDto)
+
+    const existingFood = {
+      ...foodExist,
+      allergens: foodInfoDto.allergen_check.allergens_found,
+    }
+
     if (foodExist) {
-      return foodExist;
+      return existingFood
     }
 
     const newFood: Prisma.FoodUncheckedCreateInput = {
