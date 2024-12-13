@@ -42,4 +42,18 @@ export class FoodRepository {
       },
     });
   }
+
+  async updateFood(id: string, food: Prisma.FoodUpdateInput) {
+    return this.prisma.food.update({
+      where: {
+        id,
+      },
+      data: food,
+      include: {
+        food_macronutrient: true,
+        food_micronutrient: true,
+        allergens: true,
+      },
+    });
+  }
 }
