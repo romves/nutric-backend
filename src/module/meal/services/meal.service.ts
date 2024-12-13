@@ -43,6 +43,9 @@ export class MealService {
           },
         },
       },
+      orderBy: {
+        created_at: 'desc',
+      },
       take: limit || 10,
       skip: offset || 0,
     };
@@ -68,6 +71,8 @@ export class MealService {
     const now = new Date();
     let startDate: Date;
     let endDate: Date;
+
+    console.log(now.toLocaleString());
 
     switch (filter) {
       case 'weekly':

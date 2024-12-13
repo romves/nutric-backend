@@ -48,6 +48,6 @@ Respond with application/json data only, without any formatting, notes, or expla
   }
 
   static generateFoodNamePrompt(): string {
-    return `Given an image of food, analyze the contents and provide a general name for the food shown in the image but still include the name of the main ingredients. Ensure the result is descriptive yet concise. Return only the food name text with no additional newlines, formatting, stopwords, or trailing spaces.`;
+    return `Given an image of food, analyze the contents and provide a general name for the food shown in the image but still include the name of the main ingredients. Ensure the result is descriptive yet concise, general, not too specific. Return only the food name text with no additional newlines, formatting, stopwords, or trailing spaces.`;
   }
 }
